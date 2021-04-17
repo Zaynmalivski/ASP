@@ -40,19 +40,23 @@ class BsmModel:
         ''' 
         <-- PUT your implementation here
         '''
-        return 0
+        d1,d2 = quantile_cal(strike, spot, self.vol, texp, intr=self.intr, divr=self.divr, cp=cp)
+        return cp*ss.norm.cdf(cp*d1)
 
     def vega(self, strike, spot, vol, texp, cp=1):
         ''' 
         <-- PUT your implementation here
         '''
-        return 0
+        d1,d2 = quantile_cal(strike, spot, vol, texp, intr=self.intr, divr=self.divr, cp=cp)
+        return spot*ss.norm.pdf(d1)*np.sqrt(texp)
 
     def gamma(self, strike, spot, vol, texp, cp=1):
         ''' 
         <-- PUT your implementation here
         '''
-        return 0
+        d1,d2 = quantile_cal(strike, spot, vol, texp, intr=self.intr, divr=self.divr, cp=cp)
+        
+        return ss.norm.pdf(d1)/(spot*vol*np.sqrt(texp))
 
     def impvol(self, price, strike, spot, texp, cp=1):
         iv_func = lambda _vol: \

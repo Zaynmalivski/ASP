@@ -38,22 +38,28 @@ class NormalModel:
         ''' 
         <-- PUT your implementation here
         '''
-        return 0
+        d = quantile_cal(strike, spot, vol, texp, intr, divr, cp=cp)
+        return cp*ss.norm.cdf(cp*d)
 
     def vega(self, strike, spot, vol, texp, intr=0.0, divr=0.0, cp=1):
         ''' 
         <-- PUT your implementation here
         '''
-        return 0
+        d = quantile_cal(strike, spot, vol, texp, intr, divr, cp=cp)
+        return ss.norm.pdf(d)*np.sqrt(texp)
 
     def gamma(self, strike, spot, vol, texp, intr=0.0, divr=0.0, cp=1):
         ''' 
         <-- PUT your implementation here
         '''
-        return 0
+        d = quantile_cal(strike, spot, vol, texp, intr, divr, cp=cp)
+        return ss.norm.pdf(d)/(vol*np.sqrt(texp))
 
     def impvol(self, price, strike, spot, texp, cp=1):
         ''' 
         <-- PUT your implementation here
         '''
-        return 0
+        iv_func = lambda _vol: \
+            normal_formula(strike, spot, _vol, texp, self.intr, self.divr, cp) - price
+        vol = sopt.brentq(iv_func, 0, 10)
+        return vol
